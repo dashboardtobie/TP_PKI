@@ -1,3 +1,5 @@
+# NOM : Tobie Datchoua
+
 ## 1 - Création d'une autortié de certification
 
 - Génération d'une clé privée pour la CA  
@@ -333,19 +335,19 @@ La durée par défaut est de 365 jours, configurée via le paramètre default_da
 
 Le certificat contient les informations suivantes :  
 
-Nom de l'entité (sujet) à qui le certificat a été délivré.  
+* Nom de l'entité (sujet) à qui le certificat a été délivré.  
 
-Clé publique de l'entité.  
+* Clé publique de l'entité.  
 
-Informations sur l'autorité de certification (CA) qui a émis le certificat.  
+* Informations sur l'autorité de certification (CA) qui a émis le certificat.  
 
-Période de validité du certificat.  
+* Période de validité du certificat.  
 
-Numéro de série du certificat.  
+* Numéro de série du certificat.  
 
-Algorithme de signature utilisé.  
+* Algorithme de signature utilisé.  
 
-Extensions X.509.
+* Extensions X.509.
 
 4 - Quel est le rôle d’une CRL ? Quelles limites présente-t-elle ?  
 
@@ -353,11 +355,11 @@ Une liste de révocation de certificats (CRL) est une liste de certificats qui o
 
 Limites d'une CRL :  
 
-Taille : La taille de la CRL peut augmenter avec le temps, ce qui peut entraîner des problèmes de bande passante et de performance.  
+* Taille : La taille de la CRL peut augmenter avec le temps, ce qui peut entraîner des problèmes de bande passante et de performance.  
 
-Latence : Les clients doivent télécharger la CRL régulièrement pour obtenir les informations de révocation les plus récentes, ce qui peut introduire une latence.  
+* Latence : Les clients doivent télécharger la CRL régulièrement pour obtenir les informations de révocation les plus récentes, ce qui peut introduire une latence.  
 
-Disponibilité : La CRL doit être disponible en permanence pour que les clients puissent vérifier les certificats.  
+* Disponibilité : La CRL doit être disponible en permanence pour que les clients puissent vérifier les certificats.  
 
 5 - Quelle différence avec OCSP ? Pourquoi est-il plus utilisé ?   
 
@@ -365,65 +367,27 @@ OCSP (Online Certificate Status Protocol) est une alternative à la CRL. Au lieu
 
 OCSP est plus utilisé car :  
 
-Plus efficace : OCSP est plus efficace en termes de bande passante et de performance car il ne nécessite pas le téléchargement d'une liste complète de certificats révoqués.  
+* Plus efficace : OCSP est plus efficace en termes de bande passante et de performance car il ne nécessite pas le téléchargement d'une liste complète de certificats révoqués.  
 
-Temps réel : OCSP offre une vérification en temps réel de l'état des certificats.  
+* Temps réel : OCSP offre une vérification en temps réel de l'état des certificats.  
 
 6 - Comment tester si un certificat est bien révoqué (via CRL et via OCSP) ?
 
-Via CRL :  
+* Via CRL : Générer une CRL après avoir révoqué le certificat. Ensuite, utiliser la commande openssl crl pour afficher le contenu de la CRL et vérifier que le numéro de série du certificat révoqué y figure.  
 
-Générer une CRL après avoir révoqué le certificat. Ensuite, utiliser la commande openssl crl pour afficher le contenu de la CRL et vérifier que le numéro de série du certificat révoqué y figure.  
-
-Via OCSP :  
-
-Envoyer une requête OCSP au répondeur OCSP pour vérifier l'état du certificat. Vérifier que la réponse OCSP indique que le certificat a été révoqué.  
+* Via OCSP : Envoyer une requête OCSP au répondeur OCSP pour vérifier l'état du certificat. Vérifier que la réponse OCSP indique que le certificat a été révoqué.  
 
 7 - En quoi la configuration d’un fichier openssl.cnf est-elle cruciale dans un environnement professionnel ? expliquez chaque partie du fichier.
 
 Le fichier openssl.cnf est crucial car il définit la politique de sécurité de votre infrastructure PKI. Il contrôle les aspects suivants :  
 
-[ca] : Section principale définissant les paramètres de l'autorité de certification.  
+* [ca] : Section principale définissant les paramètres de l'autorité de certification.   
 
-default_ca : Nom de la section CA par défaut.  
+* [CA_default] : Définit les chemins vers les fichiers et répertoires utilisés par la CA (certificats, clés privées, CRL, etc.).  
 
-[CA_default] : Définit les chemins vers les fichiers et répertoires utilisés par la CA (certificats, clés privées, CRL, etc.).  
+* [policy_strict] : Définit la politique de nommage des certificats.  
 
-dir : Répertoire de base pour la CA.  
+* [req_distinguished_name] : Définit le nom distinctif (DN) par défaut pour les CSR.  
 
-certs, crl_dir, new_certs_dir, database, serial, crlnumber : Chemins vers les fichiers et répertoires spécifiques.  
-
-certificate, private_key : Chemins vers le certificat et la clé privée de la CA.  
-
-default_md : Algorithme de hachage par défaut.  
-
-default_days : Durée de validité par défaut des certificats.  
-
-default_crl_days : Durée de validité par défaut des CRL.  
-
-x509_extensions : Extensions X.509 par défaut à utiliser.  
-
-policy : Nom de la section définissant la politique de nommage des certificats.  
-
-[policy_strict] : Définit la politique de nommage des certificats.  
-
-countryName, stateOrProvinceName, organizationName : Champs obligatoires.  
-
-organizationalUnitName, commonName, emailAddress : Champs optionnels.  
-
-[req] : Définit les paramètres pour la création de demandes de signature de certificats (CSR).  
-
-default_bits : Taille de la clé privée à générer.  
-
-prompt : Indique si l'utilisateur doit être invité à saisir des informations.  
-
-default_md : Algorithme de hachage par défaut.  
-
-distinguished_name : Nom de la section définissant le nom distinctif (DN) de la CSR.  
-
-x509_extensions : Extensions X.509 à utiliser pour la CSR.  
-
-[req_distinguished_name] : Définit le nom distinctif (DN) par défaut pour les CSR.  
-
-[v3_ca],[usr_cert], [crl_ext] : Définissent les extensions X.509 à utiliser pour les certificats d'autorité de certification (CA), les certificats utilisateur et les CRL, respectivement. Ces sections permettent de définir les usages autorisés pour les certificats et de renforcer la sécurité de l'infrastructure PKI.  
+* [v3_ca],[usr_cert], [crl_ext] : Définissent les extensions X.509 à utiliser pour les certificats d'autorité de certification (CA), les certificats utilisateur et les CRL, respectivement. Ces sections permettent de définir les usages autorisés pour les certificats et de renforcer la sécurité de l'infrastructure PKI.  
 
